@@ -1,0 +1,467 @@
+// Run: node server/data/seed.js
+// Seeds the database with real Kirtipur data to get started
+
+require('dotenv').config({ path: '../.env' });
+const mongoose = require('mongoose');
+const Listing = require('../models/Listing');
+const Ward = require('../models/Ward');
+const Emergency = require('../models/Emergency');
+
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/kirtipur-directory';
+
+const listings = [
+  // --- HEALTH ---
+  {
+    name: 'Kirtipur Hospital',
+    category: 'health',
+    ward: 3,
+    description: 'Main hospital serving Kirtipur municipality. OPD, emergency, maternity, and laboratory services.',
+    address: 'Kirtipur, Kathmandu',
+    phone: '01-4331278',
+    hours: 'Emergency: 24/7 | OPD: Sun–Fri 9am–4pm',
+    location: { type: 'Point', coordinates: [85.2796, 27.6773] },
+    meta: { services: ['OPD', 'Emergency', 'Maternity', 'Laboratory', 'X-Ray'] },
+    verified: true,
+  },
+  {
+    name: 'Kirtipur Health Post',
+    category: 'health',
+    ward: 5,
+    description: 'Primary health post providing basic health services, vaccinations, and maternal care.',
+    address: 'Naya Bazaar, Kirtipur',
+    phone: '01-4330145',
+    hours: 'Sun–Fri 10am–5pm',
+    location: { type: 'Point', coordinates: [85.2812, 27.6781] },
+    meta: { services: ['Vaccination', 'Maternal health', 'Basic OPD'] },
+    verified: true,
+  },
+  // --- EDUCATION ---
+  {
+    name: 'Tribhuvan University (TU) Campus',
+    category: 'education',
+    ward: 4,
+    description: 'Nepal\'s largest university. Multiple faculties including science, humanities, and management.',
+    address: 'Kirtipur, Kathmandu',
+    phone: '01-4330431',
+    hours: 'Sun–Fri 10am–5pm',
+    location: { type: 'Point', coordinates: [85.2833, 27.6789] },
+    meta: { type: 'University', faculties: ['Science', 'Humanities', 'Management', 'Education'] },
+    verified: true,
+  },
+  {
+    name: 'Kirtipur Higher Secondary School',
+    category: 'education',
+    ward: 2,
+    description: 'Secondary school offering grades 9–12 with science and management streams.',
+    address: 'Kirtipur Old Town',
+    phone: '',
+    hours: 'Sun–Fri 10am–4pm',
+    location: { type: 'Point', coordinates: [85.2778, 27.6765] },
+    meta: { grades: '9–12', streams: ['Science', 'Management'] },
+    verified: true,
+  },
+  // --- WARD OFFICES ---
+  {
+    name: 'Ward Office No. 1',
+    category: 'ward-office',
+    ward: 1,
+    description: 'Ward 1 office — Kirtipur Chok. President: Echyya Kumar Maharjan.',
+    address: 'Kirtipur Chok',
+    phone: '9841369221',
+    hours: 'Sun–Fri 10am–5pm',
+    location: { type: 'Point', coordinates: [85.2788, 27.6775] },
+    verified: true,
+  },
+  {
+    name: 'Ward Office No. 2',
+    category: 'ward-office',
+    ward: 2,
+    description: 'Ward 2 office — Devdhoka. President: Rupesh Maharjan.',
+    address: 'Devdhoka',
+    phone: '9841242292',
+    hours: 'Sun–Fri 10am–5pm',
+    location: { type: 'Point', coordinates: [85.2760, 27.6798] },
+    verified: true,
+  },
+  {
+    name: 'Ward Office No. 3',
+    category: 'ward-office',
+    ward: 3,
+    description: 'Ward 3 office — Dhalpa Chowk. President: Subindra Maharjan.',
+    address: 'Dhalpa Chowk',
+    phone: '9841369220',
+    hours: 'Sun–Fri 10am–5pm',
+    location: { type: 'Point', coordinates: [85.2799, 27.6762] },
+    verified: true,
+  },
+  {
+    name: 'Ward Office No. 4',
+    category: 'ward-office',
+    ward: 4,
+    description: 'Ward 4 office — Godam Chaur. President: Rajendra Baniya.',
+    address: 'Godam Chaur',
+    phone: '9841700249',
+    hours: 'Sun–Fri 10am–5pm',
+    location: { type: 'Point', coordinates: [85.2835, 27.6810] },
+    verified: true,
+  },
+  {
+    name: 'Ward Office No. 5',
+    category: 'ward-office',
+    ward: 5,
+    description: 'Ward 5 office — Kanyachour, Jankha. President: Rajendra Kumar Maharjan.',
+    address: 'Kanyachour, Jankha',
+    phone: '9841369875',
+    hours: 'Sun–Fri 10am–5pm',
+    location: { type: 'Point', coordinates: [85.2718, 27.6608] },
+    verified: true,
+  },
+  {
+    name: 'Ward Office No. 6',
+    category: 'ward-office',
+    ward: 6,
+    description: 'Ward 6 office — Jalvinayak, Chobar. President: Khirman Singh Basnet.',
+    address: 'Jalvinayak, Chobar',
+    phone: '9841301564',
+    hours: 'Sun–Fri 10am–5pm',
+    location: { type: 'Point', coordinates: [85.2710, 27.6643] },
+    verified: true,
+  },
+  {
+    name: 'Ward Office No. 7',
+    category: 'ward-office',
+    ward: 7,
+    description: 'Ward 7 office — Bhajangal. President: Diwakar Adhikari.',
+    address: 'Bhajangal',
+    phone: '9861595705',
+    hours: 'Sun–Fri 10am–5pm',
+    location: { type: 'Point', coordinates: [85.2780, 27.6503] },
+    verified: true,
+  },
+  {
+    name: 'Ward Office No. 8',
+    category: 'ward-office',
+    ward: 8,
+    description: 'Ward 8 office — Panga, Dhokasi. President: Sanu Maiya Maharjan.',
+    address: 'Panga, Dhokasi',
+    phone: '9841401045',
+    hours: 'Sun–Fri 10am–5pm',
+    location: { type: 'Point', coordinates: [85.2688, 27.6700] },
+    verified: true,
+  },
+  {
+    name: 'Ward Office No. 9',
+    category: 'ward-office',
+    ward: 9,
+    description: 'Ward 9 office — Taghwapi. President: Dinesh Shrestha.',
+    address: 'Taghwapi',
+    phone: '9841301292',
+    hours: 'Sun–Fri 10am–5pm',
+    location: { type: 'Point', coordinates: [85.2820, 27.6780] },
+    verified: true,
+  },
+  {
+    name: 'Ward Office No. 10',
+    category: 'ward-office',
+    ward: 10,
+    description: 'Ward 10 office — Community Building, Kwa Kev. President: Naresh Maharjan.',
+    address: 'Community Building, Kwa Kev',
+    phone: '9841896870',
+    hours: 'Sun–Fri 10am–5pm',
+    location: { type: 'Point', coordinates: [85.2808, 27.6785] },
+    verified: true,
+  },
+  {
+    name: 'Kirtipur Municipality Main Office',
+    category: 'ward-office',
+    ward: null,
+    description: 'Main municipality office for all civic services — birth registration, citizenship, tax, and permits.',
+    address: 'Kirtipur Municipality, Kathmandu',
+    phone: '01-4331110',
+    hours: 'Sun–Fri 10am–5pm',
+    location: { type: 'Point', coordinates: [85.2801, 27.6776] },
+    verified: true,
+  },
+  // --- WATER ---
+  {
+    name: 'Naya Bazaar Water Tap',
+    category: 'water',
+    ward: 5,
+    description: 'Public water supply point — stone spout (dhara)',
+    address: 'Naya Bazaar, Kirtipur',
+    location: { type: 'Point', coordinates: [85.2815, 27.6783] },
+    meta: { type: 'Stone spout', available: 'Morning and evening' },
+    verified: true,
+  },
+  {
+    name: 'Kirtipur Old Town Dhara',
+    category: 'water',
+    ward: 2,
+    description: 'Traditional stone spout near old town temple area',
+    address: 'Old Town, Kirtipur',
+    location: { type: 'Point', coordinates: [85.2770, 27.6760] },
+    meta: { type: 'Stone spout' },
+    verified: false,
+  },
+  // --- TEMPLES & HERITAGE ---
+  {
+    name: 'Baghbhairav Temple',
+    category: 'temple',
+    ward: 1,
+    description: 'Ancient three-tiered Newah temple housing Bhairav as a tiger — the protector deity of Kirtipur. A major festival centre and hilltop landmark.',
+    address: 'Old Town, Kirtipur',
+    hours: 'Open daily',
+    location: { type: 'Point', coordinates: [85.2808, 27.6773] },
+    meta: {
+      history: 'Built during the reign of King Shivadev (1099–1126 AD). Renovated in 1803, 1827, 1967, 2006, and 2012 AD.',
+      festivals: 'Bagh Bhairab Jatra (annual); Dashain/Mohani special puja. Devotees perform puja before weddings and rice-feeding ceremonies.',
+      architecture: 'Three-tiered rectangular Newah temple on a raised platform with four brick plinths, 20 carved exterior columns, jhingati tile roofs, and a metal gajur spire.',
+      alternateNames: 'Bagh Bhairab Temple',
+    },
+    verified: true,
+  },
+  {
+    name: 'Chilancho Stupa',
+    category: 'stupa',
+    ward: 10,
+    description: '"The eternal stupa on the hilltop" — one of Kirtipur\'s most iconic Buddhist monuments with sweeping panoramic views of the Kathmandu Valley.',
+    address: 'Singhaduwal, Ward 10, Kirtipur',
+    hours: 'Open daily',
+    location: { type: 'Point', coordinates: [85.2812, 27.6793] },
+    meta: {
+      history: 'Construction date unknown; renovated in 1533 AD under the initiative of Jagat Pal Verma. Name derives from Newari — "Chilan" (eternal) and "Cho" (hilltop).',
+      festivals: 'Buddha Purnima processions; Ashwin Purnima celebrations; life-milestone ceremonies (Ihi, Bratabandha); Mha Puja.',
+      architecture: 'Central chaitya with four smaller ones at the corners on a raised square brick platform. White dome with yellow accents, symbolic eyes, and 13 symbolic layers.',
+      alternateNames: 'Chilancho Baha, Jagatpal Maha Vihar, Kyapu Baha',
+    },
+    verified: true,
+  },
+  {
+    name: 'Uma Maheshwor Temple',
+    category: 'temple',
+    ward: 2,
+    description: 'Three-tiered hilltop temple dedicated to Shiva and Parvati, built in 1655 AD. Offers panoramic views of the Kathmandu Valley.',
+    address: 'Kwacho, Ward 2, Kirtipur',
+    hours: 'Open daily',
+    location: { type: 'Point', coordinates: [85.2768, 27.6804] },
+    meta: {
+      history: 'Built in 1655 AD (NS 775) by Bishwo Nath of Patan. Multiple inscriptions inside date from 1662–1715 AD with deity statues of Saraswati, Maheshmardini, and Ganesh.',
+      festivals: 'Annual Dashain (Mohani) festival ceremonies; daily pujas.',
+      architecture: 'Three-tiered temple on four successive brick plinths, stone stairway with guardian elephants, 20 ornately carved columns, jhingati tile roofs, and a metal gajur spire.',
+      alternateNames: 'Bhawani Shankar Uma Maheshwor',
+    },
+    verified: true,
+  },
+  {
+    name: 'Jal Binayak Temple',
+    category: 'temple',
+    ward: 6,
+    description: 'One of the four celebrated Ganesh temples of the Kathmandu Valley, believed to be the oldest. Situated at the Chobar gorge by the Bagmati River.',
+    address: 'Chobar, Ward 6, Kirtipur',
+    hours: 'Open daily',
+    location: { type: 'Point', coordinates: [85.2699, 27.6533] },
+    meta: {
+      history: 'Built in the 16th century. Renovated in 789 NS and 871 NS. Considered the oldest of the four famous Ganesh temples in the Kathmandu Valley.',
+      festivals: 'Nhega Jatra; major pilgrimage site year-round — people from across the valley come for puja, prayer, and marriages.',
+      architecture: '16th-century temple at the entrance to Chobar gorge on the Bagmati River bank.',
+      alternateNames: 'Kwoyena, Koyena Ganesh',
+    },
+    verified: true,
+  },
+  {
+    name: 'Aadinath Temple',
+    category: 'gumba',
+    ward: 6,
+    description: 'Ancient Buddhist monastery housing Anandadi Lokeswara — the oldest of the four Lokeswaras of Newah Buddhism. A living place of daily worship in Chovar.',
+    address: 'Chovar, Ward 6, Kirtipur',
+    hours: 'Open daily',
+    location: { type: 'Point', coordinates: [85.2710, 27.6550] },
+    meta: {
+      history: 'Built in the 15th century; renovated in 1640 AD. Houses the oldest of four Lokeswaras of Newah Buddhism (the others are in Bungamati, Asan/Kathmandu, and Nala).',
+      festivals: 'Jatra of Anandaadi Lokeshwor on Chaitra Shukla Ashtami and Navami (March/April) — celebrated across the Kathmandu Valley with Cha Puja, Pi Puja, bathing ceremonies, and a grand procession.',
+      architecture: 'Three-tiered brick temple, north-oriented with main deity on the ground floor facing north.',
+      alternateNames: 'Anandadi Lokeshwar Mandir, Cho Baha, Karunamye',
+    },
+    verified: true,
+  },
+  {
+    name: 'Balkumari Bishnudevi Dyochhen',
+    category: 'temple',
+    ward: 8,
+    description: 'Newar goddess shrine housing Bishnudevi, one of the eight Newar mother goddesses. Located in the ancient settlement of Panga.',
+    address: 'Lachhi, Panga, Ward 8, Kirtipur',
+    hours: 'Open in the mornings only',
+    location: { type: 'Point', coordinates: [85.2675, 27.6701] },
+    meta: {
+      history: 'Bell inscriptions date to N.S. 950, 1007, and 1035 documenting centuries of donor contributions. Renovated in 1914 and 1934.',
+      festivals: 'Margashirsha-shukla-8 festival; Chilathwo saptami buffalo sacrifice at Balkumari Pith.',
+      architecture: 'Two-storey dyochhen on a double-stepped rectangular platform. Ground floor open falcha design; upper level with three-bay latticed window centrepiece; square tower with brass finials.',
+      alternateNames: 'Bishnu Devi Temple, Panga Balkumari',
+    },
+    verified: true,
+  },
+  // --- BUSINESS ---
+  {
+    name: 'Kirtipur Bazaar Market Area',
+    category: 'business',
+    ward: 5,
+    description: 'Main commercial market area with grocery stores, pharmacies, hardware, and local shops.',
+    address: 'Naya Bazaar, Kirtipur',
+    location: { type: 'Point', coordinates: [85.2810, 27.6779] },
+    verified: true,
+  },
+];
+
+// Source: kirtipurmun.gov.np/wards (scraped 2026-06-02)
+// population field stores household count (official population figures not published)
+const wards = [
+  {
+    wardNumber: 1,
+    name: 'Kirtipur Ward No. 1',
+    chairperson: 'Echyya Kumar Maharjan',
+    phone: '9841369221',
+    email: 'ward1.kirtipur@gmail.com',
+    officeAddress: 'Kirtipur Chok',
+    officeHours: 'Sun–Fri, 10am–5pm',
+    area: '43.11 km²',
+    population: 1899,
+  },
+  {
+    wardNumber: 2,
+    name: 'Kirtipur Ward No. 2',
+    chairperson: 'Rupesh Maharjan',
+    phone: '9841242292',
+    email: 'ward2.kirtipur@gmail.com',
+    officeAddress: 'Devdhoka',
+    officeHours: 'Sun–Fri, 10am–5pm',
+    area: '71.89 km²',
+    population: 2443,
+  },
+  {
+    wardNumber: 3,
+    name: 'Kirtipur Ward No. 3',
+    chairperson: 'Subindra Maharjan',
+    phone: '9841369220',
+    email: 'ward3.kirtipur@gmail.com',
+    officeAddress: 'Dhalpa Chowk',
+    officeHours: 'Sun–Fri, 10am–5pm',
+    area: '170.75 km²',
+    population: 1357,
+  },
+  {
+    wardNumber: 4,
+    name: 'Kirtipur Ward No. 4',
+    chairperson: 'Rajendra Baniya',
+    phone: '9841700249',
+    email: 'ward4.kirtipur@gmail.com',
+    officeAddress: 'Godam Chaur',
+    officeHours: 'Sun–Fri, 10am–5pm',
+    area: '5.93 km²',
+    population: 2786,
+  },
+  {
+    wardNumber: 5,
+    name: 'Kirtipur Ward No. 5',
+    chairperson: 'Rajendra Kumar Maharjan',
+    phone: '9841369875',
+    email: 'ward5.kirtipur@gmail.com',
+    officeAddress: 'Kanyachour, Jankha',
+    officeHours: 'Sun–Fri, 10am–5pm',
+    area: '25.08 km²',
+    population: 3499,
+  },
+  {
+    wardNumber: 6,
+    name: 'Kirtipur Ward No. 6',
+    chairperson: 'Khirman Singh Basnet',
+    phone: '9841301564',
+    email: 'ward6.kirtipur@gmail.com',
+    officeAddress: 'Jalvinayak, Chobar',
+    officeHours: 'Sun–Fri, 10am–5pm',
+    area: '25.19 km²',
+    population: 1702,
+  },
+  {
+    wardNumber: 7,
+    name: 'Kirtipur Ward No. 7',
+    chairperson: 'Diwakar Adhikari',
+    phone: '9861595705',
+    email: 'ward7.kirtipur@gmail.com',
+    officeAddress: 'Bhajangal',
+    officeHours: 'Sun–Fri, 10am–5pm',
+    area: '229.28 km²',
+    population: 2068,
+  },
+  {
+    wardNumber: 8,
+    name: 'Kirtipur Ward No. 8',
+    chairperson: 'Sanu Maiya Maharjan',
+    phone: '9841401045',
+    email: 'ward8.kirtipur@gmail.com',
+    officeAddress: 'Panga, Dhokasi',
+    officeHours: 'Sun–Fri, 10am–5pm',
+    area: '313.40 km²',
+    population: 1218,
+  },
+  {
+    wardNumber: 9,
+    name: 'Kirtipur Ward No. 9',
+    chairperson: 'Dinesh Shrestha',
+    phone: '9841301292',
+    email: 'ward9.kirtipur@gmail.com',
+    officeAddress: 'Taghwapi',
+    officeHours: 'Sun–Fri, 10am–5pm',
+    area: '8.84 km²',
+    population: 2995,
+  },
+  {
+    wardNumber: 10,
+    name: 'Kirtipur Ward No. 10',
+    chairperson: 'Naresh Maharjan',
+    phone: '9841896870',
+    email: 'ward10.kirtipur@gmail.com',
+    officeAddress: 'Community Building, Kwa Kev',
+    officeHours: 'Sun–Fri, 10am–5pm',
+    area: '8.35 km²',
+    population: 3198,
+  },
+  {
+    wardNumber: 11,
+    name: 'Kirtipur Ward No. 11',
+    officeHours: 'Sun–Fri, 10am–5pm',
+  },
+];
+
+const emergencyContacts = [
+  { name: 'Nepal Police — Kirtipur', type: 'police', phone: '100', altPhone: '01-4330100', available24h: true },
+  { name: 'Traffic Police', type: 'police', phone: '103', available24h: true },
+  { name: 'Ambulance (National)', type: 'ambulance', phone: '102', available24h: true },
+  { name: 'Kirtipur Hospital Emergency', type: 'hospital', phone: '01-4331278', available24h: true, address: 'Kirtipur' },
+  { name: 'Fire Brigade', type: 'fire', phone: '101', available24h: true },
+  { name: 'Kirtipur Municipality', type: 'municipality', phone: '01-4330002', available24h: false, notes: 'Sun–Fri 10am–5pm' },
+  { name: 'Disaster Management (NDRRMA)', type: 'other', phone: '1129', available24h: true },
+];
+
+async function seed() {
+  await mongoose.connect(MONGO_URI);
+  console.log('Connected to MongoDB');
+
+  await Listing.deleteMany({});
+  await Ward.deleteMany({});
+  await Emergency.deleteMany({});
+  console.log('Cleared existing data');
+
+  await Listing.insertMany(listings);
+  console.log(`Seeded ${listings.length} listings`);
+
+  await Ward.insertMany(wards);
+  console.log(`Seeded ${wards.length} wards`);
+
+  await Emergency.insertMany(emergencyContacts);
+  console.log(`Seeded ${emergencyContacts.length} emergency contacts`);
+
+  console.log('Seed complete!');
+  process.exit(0);
+}
+
+seed().catch((err) => { console.error(err); process.exit(1); });

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hamro Kirtipur — Brand Sheet</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Mukta:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root { --orange:#E8602C; --orange-lt:#FCEDE4; --green:#1A7A5E; --green-dk:#12604A; --green-lt:#E3F1EC; --sand:#F4A259; --slate:#2C3A34; --muted:#5A6660; --border:#ECE3D8; --bg:#FBF6F0; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Outfit',sans-serif; background:var(--bg); color:var(--slate); line-height:1.6; padding:48px 24px; }
+  .sheet { max-width:880px; margin:0 auto; }
+  header { display:flex; align-items:center; gap:24px; padding-bottom:28px; border-bottom:3px solid var(--orange); margin-bottom:36px; }
+  header img { width:108px; height:108px; border-radius:50%; }
+  h1 { font-size:34px; font-weight:700; color:var(--slate); line-height:1.1; }
+  h1 span { color:var(--orange); }
+  .devanagari { font-family:'Mukta',sans-serif; font-size:26px; color:var(--green); font-weight:600; }
+  .tagline { font-size:15px; color:var(--muted); margin-top:6px; }
+  h2 { font-size:13px; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); margin:36px 0 16px; font-weight:600; }
+  .pal { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; }
+  .sw { border-radius:10px; overflow:hidden; border:1px solid var(--border); }
+  .sw .c { height:72px; } .sw .i { padding:9px 12px; background:#fff; }
+  .sw .n { font-size:13px; font-weight:600; } .sw .h { font-size:12px; color:var(--muted); font-family:monospace; }
+  .sw .r { font-size:11px; color:#999; margin-top:2px; }
+  .logos { display:flex; gap:24px; align-items:center; flex-wrap:wrap; }
+  .logo-box { text-align:center; } .logo-box img { border-radius:50%; display:block; } .logo-box .cap { font-size:11px; color:var(--muted); margin-top:8px; }
+  .usage { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .do, .dont { border-radius:10px; padding:16px 18px; }
+  .do { background:var(--green-lt); } .dont { background:var(--orange-lt); }
+  .do h3 { color:var(--green-dk); font-size:14px; margin-bottom:8px; } .dont h3 { color:#b1481f; font-size:14px; margin-bottom:8px; }
+  .do ul, .dont ul { margin-left:18px; font-size:13px; color:var(--muted); } .do li, .dont li { margin-bottom:5px; }
+  .type-row { display:flex; gap:16px; align-items:baseline; padding:10px 0; border-bottom:1px solid var(--border); flex-wrap:wrap; }
+  .type-label { font-size:12px; color:var(--muted); width:90px; }
+  .nav-demo { display:flex; align-items:center; justify-content:space-between; background:#fff; border:1px solid var(--border); border-radius:10px; padding:0 16px; height:56px; }
+  .nav-demo .b { display:flex; align-items:center; gap:10px; font-weight:600; color:var(--slate); } .nav-demo .b img { width:32px; height:32px; border-radius:50%; } .nav-demo .b span span { color:var(--orange); }
+  .nlinks span { font-size:13px; padding:6px 11px; border-radius:6px; color:var(--muted); } .nlinks .on { background:var(--green); color:#fff; }
+  .strip-demo { display:flex; align-items:center; gap:10px; background:var(--orange); color:#fff; padding:7px 16px; border-radius:8px; margin-top:8px; font-size:13px; font-weight:500; }
+  .strip-demo .pill { border:1px solid rgba(255,255,255,0.4); border-radius:20px; padding:2px 10px; }
+  footer { margin-top:48px; padding-top:20px; border-top:1px solid var(--border); font-size:12px; color:#999; }
+  @media print { body { padding:0; } }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <header>
+    <img src="client/public/brand/logo.png" alt="Hamro Kirtipur logo">
+    <div>
+      <div class="devanagari">हाम्रो कीर्तिपुर</div>
+      <h1>Hamro <span>Kirtipur</span></h1>
+      <div class="tagline">discover your neighbourhood</div>
+    </div>
+  </header>
+  <h2>The logo</h2>
+  <div class="logos">
+    <div class="logo-box"><img src="client/public/brand/logo.png" width="120" height="120" alt=""><div class="cap">Primary · 120px+</div></div>
+    <div class="logo-box"><img src="client/public/brand/logo.png" width="64" height="64" alt=""><div class="cap">Avatar · 64px</div></div>
+    <div class="logo-box"><img src="client/public/brand/logo.png" width="32" height="32" alt=""><div class="cap">Favicon · 32px</div></div>
+  </div>
+  <h2>Primary colours — Direction B</h2>
+  <div class="pal">
+    <div class="sw"><div class="c" style="background:#E8602C"></div><div class="i"><div class="n">Sunset orange</div><div class="h">#E8602C</div><div class="r">Accent · brand, emergency</div></div></div>
+    <div class="sw"><div class="c" style="background:#1A7A5E"></div><div class="i"><div class="n">Hill green</div><div class="h">#1A7A5E</div><div class="r">Primary · tabs, buttons</div></div></div>
+    <div class="sw"><div class="c" style="background:#12604A"></div><div class="i"><div class="n">Deep green</div><div class="h">#12604A</div><div class="r">Headings, hovers</div></div></div>
+    <div class="sw"><div class="c" style="background:#F4A259"></div><div class="i"><div class="n">Warm sand</div><div class="h">#F4A259</div><div class="r">Badges, soft accents</div></div></div>
+  </div>
+  <h2>Neutrals</h2>
+  <div class="pal">
+    <div class="sw"><div class="c" style="background:#2C3A34"></div><div class="i"><div class="n">Slate</div><div class="h">#2C3A34</div><div class="r">Body text, footer</div></div></div>
+    <div class="sw"><div class="c" style="background:#5A6660"></div><div class="i"><div class="n">Muted slate</div><div class="h">#5A6660</div><div class="r">Secondary text</div></div></div>
+    <div class="sw"><div class="c" style="background:#ECE3D8"></div><div class="i"><div class="n">Warm border</div><div class="h">#ECE3D8</div></div></div>
+    <div class="sw"><div class="c" style="background:#FBF6F0"></div><div class="i"><div class="n">Off-white</div><div class="h">#FBF6F0</div><div class="r">Page background</div></div></div>
+  </div>
+  <h2>Typography</h2>
+  <div class="type-row"><span class="type-label">Display</span><span style="font-size:28px;font-weight:600;color:var(--slate)">Outfit Semibold</span></div>
+  <div class="type-row"><span class="type-label">Body</span><span style="font-size:16px">Outfit Regular — all body text and UI</span></div>
+  <div class="type-row"><span class="type-label">Nepali</span><span style="font-family:'Mukta';font-size:20px;color:var(--green)">मुक्त — Mukta for Devanagari</span></div>
+  <h2>In context</h2>
+  <div class="nav-demo">
+    <div class="b"><img src="client/public/brand/logo.png" alt=""><span>Hamro <span>Kirtipur</span></span></div>
+    <div class="nlinks"><span class="on">Map</span><span>Discover</span><span>Community</span><span>About</span></div>
+  </div>
+  <div class="strip-demo"><span>&#9888; Emergency:</span><span class="pill">Police 100</span><span class="pill">Ambulance 102</span><span class="pill">Fire 101</span></div>
+  <h2>Usage</h2>
+  <div class="usage">
+    <div class="do"><h3>Do</h3><ul>
+      <li>Keep the circular photo logo as the main mark</li>
+      <li>Use hill green for primary actions and active tabs</li>
+      <li>Use sunset orange for brand accent and emergency</li>
+      <li>Use warm sand sparingly for badges</li>
+      <li>Pair Devanagari (Mukta) with Latin (Outfit)</li>
+    </ul></div>
+    <div class="dont"><h3>Don't</h3><ul>
+      <li>Stretch, rotate, or recolour the logo</li>
+      <li>Crop the circular border off the logo</li>
+      <li>Use orange for large background areas</li>
+      <li>Mix in the old earthy/forest palette</li>
+      <li>Place the logo on busy photo backgrounds</li>
+    </ul></div>
+  </div>
+  <footer>Hamro Kirtipur brand sheet · Direction B palette · circular photo logo · tagline "discover your neighbourhood"</footer>
+</div>
+</body>
+</html>
