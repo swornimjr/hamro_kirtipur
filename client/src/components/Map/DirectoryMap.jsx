@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { Link } from 'react-router-dom';
@@ -26,6 +26,27 @@ function createColoredIcon(color) {
     iconAnchor: [14, 14],
     popupAnchor: [0, -16],
   });
+}
+
+// Disable scroll zoom until user clicks the map; re-disable on mouse leave
+function ScrollZoomControl({ active, onActivate }) {
+  const map = useMap();
+  useEffect(() => {
+    if (active) {
+      map.scrollWheelZoom.enable();
+    } else {
+      map.scrollWheelZoom.disable();
+    }
+  }, [active, map]);
+
+  useEffect(() => {
+    const container = map.getContainer();
+    const handleLeave = () => onActivate(false);
+    container.addEventListener('mouseleave', handleLeave);
+    return () => container.removeEventListener('mouseleave', handleLeave);
+  }, [map, onActivate]);
+
+  return null;
 }
 
 // Fly to user location
@@ -56,16 +77,39 @@ function LocateButton() {
 const KIRTIPUR_CENTER = [27.6774, 85.2801];
 
 export default function DirectoryMap({ listings }) {
+  const [scrollActive, setScrollActive] = useState(false);
+
   return (
+    <div
+      style={{ position: 'relative' }}
+      onClick={() => setScrollActive(true)}
+    >
+      {!scrollActive && (
+        <div style={{
+          position: 'absolute', inset: 0, zIndex: 1000,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          pointerEvents: 'none',
+        }}>
+          <div style={{
+            background: 'rgba(0,0,0,0.55)', color: 'white',
+            padding: '8px 16px', borderRadius: 20,
+            fontSize: 13, fontWeight: 500,
+          }}>
+            Click to interact with the map
+          </div>
+        </div>
+      )}
     <MapContainer
       center={KIRTIPUR_CENTER}
       zoom={15}
+      scrollWheelZoom={false}
       style={{ height: '520px', width: '100%' }}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+      <ScrollZoomControl active={scrollActive} onActivate={setScrollActive} />
       <LocateButton />
       {listings.map((listing) => {
         const [lng, lat] = listing.location.coordinates;
@@ -104,5 +148,6 @@ export default function DirectoryMap({ listings }) {
         );
       })}
     </MapContainer>
+    </div>
   );
 }

@@ -67,7 +67,7 @@ body {
   height: 56px;
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1000;
 }
 .navbar-brand {
   font-size: 18px;
@@ -163,6 +163,7 @@ body {
   border-radius: var(--radius);
   overflow: hidden;
   border: 1px solid var(--border);
+  isolation: isolate;
 }
 
 /* Listing card */

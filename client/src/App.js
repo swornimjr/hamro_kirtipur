@@ -7,6 +7,7 @@ import WardsPage from './pages/WardsPage';
 import WardDetailPage from './pages/WardDetailPage';
 import ListingDetailPage from './pages/ListingDetailPage';
 import SuggestPage from './pages/SuggestPage';
+import ThingsToDoPage from './pages/ThingsToDoPage';
 import AdminLoginPage from './pages/AdminLoginPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
 import './App.css';
@@ -23,6 +24,7 @@ function PublicLayout() {
           <Route path="/wards/:wardNumber" element={<WardDetailPage />} />
           <Route path="/listing/:id" element={<ListingDetailPage />} />
           <Route path="/suggest" element={<SuggestPage />} />
+          <Route path="/discover" element={<ThingsToDoPage />} />
         </Routes>
       </main>
     </>

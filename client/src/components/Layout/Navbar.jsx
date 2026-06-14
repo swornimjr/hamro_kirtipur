@@ -11,6 +11,7 @@ export default function Navbar() {
       <div className="navbar-links">
         <NavLink to="/" end className={({ isActive }) => isActive ? 'active' : ''}>Map</NavLink>
         <NavLink to="/wards" className={({ isActive }) => isActive ? 'active' : ''}>Wards</NavLink>
+        <NavLink to="/discover" className={({ isActive }) => isActive ? 'active' : ''}>Things to Do</NavLink>
         <NavLink to="/suggest" className={({ isActive }) => isActive ? 'active' : ''}>Suggest a place</NavLink>
       </div>
     </nav>
